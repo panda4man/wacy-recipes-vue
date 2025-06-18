@@ -3,7 +3,8 @@
         <aside class="w-full lg:w-96 p-4 rounded-lg">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-semibold text-xl">Filters</h2>
-                <button @click="clearSideFilters" class="border rounded-lg py-2 px-4 hover:border-alaska-gold">clear</button>
+                <button @click="clearSideFilters"
+                    class="border rounded-lg py-2 px-4 hover:border-alaska-gold">clear</button>
             </div>
 
             <div class="bg-white rounded-lg p-4">
@@ -41,14 +42,17 @@
                 <RecipeCard v-for="recipe in recipesStore.recipes" :key="recipe.slug" :recipe="recipe" />
             </div>
 
-            <p class="text-sm text-gray-600 dark:text-gray-300 py-6 text-center" v-if="recipesStore.meta">
+            <div v-if="recipesStore.recipes.length === 0" class="mt-12 text-center text-gray-600 dark:text-gray-300">
+                <p class="text-lg font-semibold">No recipes found</p>
+                <p class="text-sm mt-1">Try adjusting your filters or search terms.</p>
+            </div>
+
+            <p class="text-sm text-gray-600 dark:text-gray-300 py-6 text-center" v-else>
                 Showing {{ recipesStore.recipes.length }} of {{ recipesStore.meta.total }} results
             </p>
 
-            <Pagination v-if="recipesStore.meta" 
-                :currentPage="recipesStore.page"
-                :lastPage="recipesStore.meta.last_page"
-                :paginationRange="recipesStore.paginationRange" 
+            <Pagination v-if="recipesStore.meta && recipesStore.meta.last_page > 1" :currentPage="recipesStore.page"
+                :lastPage="recipesStore.meta.last_page" :paginationRange="recipesStore.paginationRange"
                 @changePage="changePage" />
         </div>
     </div>
@@ -88,7 +92,7 @@ const clearKeyword = async () => {
 }
 
 const applyFilters = async () => {
-    currentPage.value = 1
+    recipesStore.resetPage()
 
     await search()
 }
