@@ -17,7 +17,7 @@ class RecipeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->words(3, true),
+            'name' => $this->faker->name(),
             'description' => $this->faker->paragraph(2),
             'author_email' => $this->faker->unique()->safeEmail(),
         ];
