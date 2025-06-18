@@ -17,7 +17,7 @@ class StepFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => $this->faker->sentence(10),
+            'description' => $this->faker->sentences(3, true),
         ];
     }
 }
