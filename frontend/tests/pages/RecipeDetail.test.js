@@ -14,10 +14,8 @@ const mockRecipe = {
     steps: [{ description: 'Season the ribs' }, { description: 'Smoke for 4 hours' }]
 }
 const backMock = vi.fn()
+const pushMock = vi.fn()
 
-vi.mock('vue-router', () => ({
-    useRoute: vi.fn(),
-}))
 vi.mock('@/api', () => ({
     default: {
         get: vi.fn()
@@ -30,6 +28,7 @@ vi.mock('vue-router', async () => {
         ...actual,
         useRouter: () => ({
             back: backMock,
+            push: pushMock
         }),
         useRoute: vi.fn(() => ({
             params: { slug: mockRecipe.slug },
@@ -200,7 +199,7 @@ describe('Recipe.vue', () => {
 })
 
 async function asyncMountRecipe(overrides = {}) {
-  const wrapper = mount(Recipe, overrides)
-  await flushPromises()
-  return wrapper
+    const wrapper = mount(Recipe, overrides)
+    await flushPromises()
+    return wrapper
 }
