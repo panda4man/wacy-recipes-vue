@@ -49,3 +49,27 @@ Or use any database GUI and connect to 127.0.0.1 port 3333
 
 ### Other tips
 `./vendor/bin/sail down` to bring down the stack
+
+## Recipes
+
+### Seeds
+
+There are two ways to generate demo data:
+
+* DemoSeeder which creates 200 full of delicious lorem ipsum.
+* Artisan command which generates recipes one at a time.
+
+
+**DemoSeeder**
+
+```bash
+$ sail artisan db:seed --class=DemoSeeder
+```
+
+> We recommend running `sail artisan db:fresh` before this seeder for a fresh DB.
+
+**Artisan Command**
+
+```bash
+$ sail artisan recipe:create
+```
