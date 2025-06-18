@@ -42,18 +42,24 @@
                 <RecipeCard v-for="recipe in recipesStore.recipes" :key="recipe.slug" :recipe="recipe" />
             </div>
 
-            <div v-if="recipesStore.recipes.length === 0" class="mt-12 text-center text-gray-600 dark:text-gray-300">
-                <p class="text-lg font-semibold">No recipes found</p>
-                <p class="text-sm mt-1">Try adjusting your filters or search terms.</p>
+            <div class="mt-12 text-center text-red-600 dark:text-red-300" v-if="recipesStore.error">
+                <p class="text-lg font-semibold">We encountered an error processing your request. Please try again.</p>
             </div>
 
-            <p class="text-sm text-gray-600 dark:text-gray-300 py-6 text-center" v-else>
-                Showing {{ recipesStore.recipes.length }} of {{ recipesStore.meta.total }} results
-            </p>
+            <template v-else>
+                <div v-if="recipesStore.recipes.length === 0" class="mt-12 text-center text-gray-600 dark:text-gray-300">
+                    <p class="text-lg font-semibold">No recipes found</p>
+                    <p class="text-sm mt-1">Try adjusting your filters or search terms.</p>
+                </div>
 
-            <Pagination v-if="recipesStore.meta && recipesStore.meta.last_page > 1" :currentPage="recipesStore.page"
-                :lastPage="recipesStore.meta.last_page" :paginationRange="recipesStore.paginationRange"
-                @changePage="changePage" />
+                <p class="text-sm text-gray-600 dark:text-gray-300 py-6 text-center" v-else>
+                    Showing {{ recipesStore.recipes.length }} of {{ recipesStore.meta.total }} results
+                </p>
+
+                <Pagination v-if="recipesStore.meta && recipesStore.meta.last_page > 1" :currentPage="recipesStore.page"
+                    :lastPage="recipesStore.meta.last_page" :paginationRange="recipesStore.paginationRange"
+                    @changePage="changePage" />
+            </template>
         </div>
     </div>
 </template>
