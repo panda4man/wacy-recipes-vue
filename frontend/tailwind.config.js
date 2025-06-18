@@ -7,6 +7,7 @@ export default {
         extend: {
             colors: {
                 'alaska-gold': '#FFB600',
+                'alaska-gold-light': '#e7c766',
             },
         },
     },

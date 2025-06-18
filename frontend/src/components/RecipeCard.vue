@@ -12,7 +12,7 @@
                 <span>📋 {{ recipe.steps_count }} steps</span>
             </div>
             <router-link :to="`/recipes/${recipe.slug}`"
-                class="w-full mt-2 block bg-alaska-gold text-center text-white font-semibold px-4 py-2 rounded hover:bg-yellow-600 transition">
+                class="w-full mt-2 block bg-alaska-gold text-center text-white font-semibold px-4 py-2 rounded hover:bg-alaska-gold-light transition">
                 View Recipe
             </router-link>
         </div>
