@@ -4,6 +4,7 @@ import axios from 'axios'
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: false,
+  timeout: 30000, // 30 seconds
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
