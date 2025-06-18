@@ -1,5 +1,5 @@
 <template>
-    <div :key="recipe.slug"
+    <div
         class="p-4 rounded-lg shadow bg-white flex flex-col justify-between dark:bg-gray-800 hover:shadow-lg transition">
         <div>
             <h3 data-test="recipe-name" class="text-lg font-bold text-blue-900" v-if="recipe.name">{{ recipe.name }}</h3>

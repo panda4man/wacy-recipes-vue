@@ -1,121 +1,93 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import RecipeCard from '@/components/RecipeCard.vue'
 
-describe('RecipeCard', () => {
-    it('renders a recipe name', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: { name: 'Chicken Parmesan', description: '' },
-            },
-        })
+const mountCard = (recipeOverrides = {}) => {
+    const defaultRecipe = {
+        name: 'Tacos',
+        description: 'Spicy beef with guac',
+        slug: 'tacos',
+    }
 
+    return mount(RecipeCard, {
+        props: {
+            recipe: { ...defaultRecipe, ...recipeOverrides },
+        },
+        global: {
+            stubs: ['router-link'],
+        },
+    })
+}
+
+describe('RecipeCard.vue', () => {
+    it('renders recipe name if present', () => {
+        const wrapper = mountCard({ name: 'Chicken Parmesan' })
         expect(wrapper.find('[data-test="recipe-name"]').text()).toContain('Chicken Parmesan')
     })
 
-    it('does NOT render recipe name element if missing name', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: { name: null, description: '' },
-            },
-        })
-
+    it('does not render name element if name is missing', () => {
+        const wrapper = mountCard({ name: null })
         expect(wrapper.find('[data-test="recipe-name"]').exists()).toBe(false)
     })
 
-    it('does NOT render recipe description element if missing name', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: { name: null, description: '' },
-            },
-        })
+    it('renders recipe description if present', () => {
+        const wrapper = mountCard({ description: 'Some desc' })
+        expect(wrapper.find('[data-test="recipe-description"]').text()).toContain('Some desc')
+    })
 
+    it('does not render description element if missing', () => {
+        const wrapper = mountCard({ description: null })
         expect(wrapper.find('[data-test="recipe-description"]').exists()).toBe(false)
     })
 
-    it('renders a description if provided', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: {
-                    name: 'Tacos',
-                    description: 'Spicy beef with guac',
-                },
-            },
-        })
-
-        expect(wrapper.find('[data-test="recipe-description"]').text()).toContain('Spicy beef with guac')
-    })
-
-    it('renders a ingredients count', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: {
-                    name: 'Tacos',
-                    description: 'Spicy beef with guac',
-                    ingredients_count: 5,
-                },
-            },
-        })
-
+    it('renders ingredients count if present', () => {
+        const wrapper = mountCard({ ingredients_count: 5 })
         expect(wrapper.find('[data-test="recipe-ingredients-count"]').text()).toContain('5')
     })
 
-    it('renders a steps count', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: {
-                    name: 'Tacos',
-                    description: 'Spicy beef with guac',
-                    steps_count: 5,
-                },
-            },
-        })
-
-        expect(wrapper.find('[data-test="recipe-steps-count"]').text()).toContain('5')
-    })
-
-    it('does NOT rendera a ingredients count if missing', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: {
-                    name: 'Tacos',
-                    description: 'Spicy beef with guac',
-                },
-            },
-        })
-
+    it('does not render ingredients count if missing', () => {
+        const wrapper = mountCard({ ingredients_count: undefined })
         expect(wrapper.find('[data-test="recipe-ingredients-count"]').exists()).toBe(false)
     })
 
-    it('renders a steps count', () => {
-        const wrapper = mount(RecipeCard, {
-            props: {
-                recipe: {
-                    name: 'Tacos',
-                    description: 'Spicy beef with guac',
-                },
-            },
-        })
+    it('renders steps count if present', () => {
+        const wrapper = mountCard({ steps_count: 3 })
+        expect(wrapper.find('[data-test="recipe-steps-count"]').text()).toContain('3')
+    })
 
+    it('does not render steps count if missing', () => {
+        const wrapper = mountCard({ steps_count: undefined })
         expect(wrapper.find('[data-test="recipe-steps-count"]').exists()).toBe(false)
     })
 
-    it('renders a View Recipe link with the correct URL', () => {
+    it('renders View Recipe link with correct slug URL', () => {
+        const wrapper = mountCard({ slug: 'tacos' })
+        const link = wrapper.find('[data-test="recipe-link"]')
+        expect(link.exists()).toBe(true)
+        expect(link.attributes('to')).toBe('/recipes/tacos')
+    })
+    it('calls truncate on description', async () => {
+        // Dynamically re-import with the mock
+        vi.resetModules()
+
+        vi.doMock('@/utils/text', () => ({
+            truncate: vi.fn(() => 'Truncated!')
+        }))
+
+        const { default: RecipeCard } = await import('@/components/RecipeCard.vue')
         const wrapper = mount(RecipeCard, {
             props: {
                 recipe: {
                     name: 'Tacos',
+                    description: 'Some long description',
                     slug: 'tacos',
-                    description: 'Spicy beef with guac',
                 },
             },
             global: {
-                stubs: ['router-link'], // prevent real navigation
+                stubs: ['router-link'],
             },
         })
 
-        const link = wrapper.find('[data-test="recipe-link"]')
-        expect(link.exists()).toBe(true)
-        expect(link.attributes('to')).toBe('/recipes/tacos')
+        expect(wrapper.find('[data-test="recipe-description"]').text()).toBe('Truncated!')
     })
 })
