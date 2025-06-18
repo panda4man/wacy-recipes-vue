@@ -18,6 +18,7 @@ class StepFactory extends Factory
     {
         return [
             'description' => $this->faker->sentences(3, true),
+            'order' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

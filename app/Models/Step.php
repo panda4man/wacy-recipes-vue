@@ -11,7 +11,7 @@ class Step extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description',
+        'description', 'order'
     ];
 
     public function recipe(): BelongsTo

@@ -17,6 +17,7 @@ class Step extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description,
+            'order' => $this->order,
         ];
     }
 }

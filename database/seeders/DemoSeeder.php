@@ -15,9 +15,13 @@ class DemoSeeder extends Seeder
         \App\Models\Recipe::factory(200)
             ->create()
             ->each(function ($recipe) {
-                $recipe->steps()->saveMany(
-                    \App\Models\Step::factory()->count(fake()->numberBetween(3, 10))->make()
-                );
+                $steps = collect(range(1, fake()->numberBetween(3, 10)))
+                    ->map(function ($i) {
+                        return \App\Models\Step::factory()->make(['order' => $i]);
+                    });
+
+                $recipe->steps()->saveMany($steps);
+
                 $recipe->ingredients()->saveMany(
                     \App\Models\Ingredient::factory()->count(fake()->numberBetween(3, 10))->make()
                 );
