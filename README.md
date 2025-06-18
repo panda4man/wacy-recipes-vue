@@ -50,6 +50,16 @@ Or use any database GUI and connect to 127.0.0.1 port 3333
 ### Other tips
 `./vendor/bin/sail down` to bring down the stack
 
+## Tests
+
+**Frontend**
+
+`sail npm run test:unit --prefix frontend`
+
+**Backend**
+
+`sail php vendor/bin/pest`
+
 ## Recipes
 
 ### Seeds
