@@ -45,56 +45,11 @@
                 Showing {{ recipesStore.recipes.length }} of {{ recipesStore.meta.total }} results
             </p>
 
-            <div class="mt-2 flex flex-wrap items-center justify-between gap-4" v-if="recipesStore.meta">
-                <!-- Prev -->
-                <button @click="changePage(recipesStore.meta.current_page - 1)"
-                    :disabled="recipesStore.meta.current_page <= 1"
-                    class="px-3 py-1 bg-blue-900 text-white rounded disabled:opacity-50">
-                    ← Prev
-                </button>
-
-                <!-- Page Numbers and Extras -->
-                <div class="flex items-center space-x-1">
-                    <!-- First -->
-                    <button v-if="recipesStore.paginationRange[0] > 1" @click="changePage(1)"
-                        class="px-3 py-1 bg-white dark:bg-gray-700 border rounded">
-                        1
-                    </button>
-
-                    <!-- Ellipsis before -->
-                    <span v-if="recipesStore.paginationRange[0] > 2" class="px-2">…</span>
-
-                    <!-- Page Numbers -->
-                    <button v-for="page in recipesStore.paginationRange" :key="page" @click="changePage(page)" :class="[
-                        'px-3 py-1 rounded border',
-                        page === recipesStore.meta.current_page
-                            ? 'bg-yellow-500 text-black font-bold'
-                            : 'bg-white dark:bg-gray-700',
-                    ]">
-                        {{ page }}
-                    </button>
-
-                    <!-- Ellipsis after -->
-                    <span
-                        v-if="recipesStore.paginationRange[recipesStore.paginationRange.length - 1] < recipesStore.meta.last_page - 1"
-                        class="px-2">…</span>
-
-                    <!-- Last -->
-                    <button
-                        v-if="recipesStore.paginationRange[recipesStore.paginationRange.length - 1] < recipesStore.meta.last_page"
-                        @click="changePage(recipesStore.meta.last_page)"
-                        class="px-3 py-1 bg-white dark:bg-gray-700 border rounded">
-                        {{ recipesStore.meta.last_page }}
-                    </button>
-                </div>
-
-                <!-- Next -->
-                <button @click="changePage(recipesStore.meta.current_page + 1)"
-                    :disabled="recipesStore.meta.current_page >= recipesStore.meta.last_page"
-                    class="px-3 py-1 bg-blue-900 text-white rounded disabled:opacity-50">
-                    Next →
-                </button>
-            </div>
+            <Pagination v-if="recipesStore.meta" 
+                :currentPage="recipesStore.page"
+                :lastPage="recipesStore.meta.last_page"
+                :paginationRange="recipesStore.paginationRange" 
+                @changePage="changePage" />
         </div>
     </div>
 </template>
@@ -106,6 +61,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'
 import { useRecipesStore } from '@/stores/useRecipesStore'
 import RecipeCard from '@/components/RecipeCard.vue'
+import Pagination from '@/components/Pagination.vue'
 
 const recipesStore = useRecipesStore()
 const router = useRouter()
