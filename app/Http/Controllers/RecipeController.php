@@ -31,6 +31,8 @@ class RecipeController extends Controller
 
     public function show(Recipe $recipe)
     {
+        $recipe->load(['steps', 'ingredients']);
+        
         return ResourcesRecipe::make($recipe);
     }
 }

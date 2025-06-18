@@ -18,7 +18,9 @@ class Recipe extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'slug' => $this->slug,
-            'email' => $this->author_email
+            'author_email' => $this->author_email,
+            'ingredients' => Ingredient::collection($this->whenLoaded('ingredients')),
+            'steps' => Step::collection($this->whenLoaded('steps')),
         ];
 
         if($this->steps_count) {
