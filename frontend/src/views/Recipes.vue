@@ -3,20 +3,20 @@
         <aside class="w-full lg:w-96 p-4 rounded-lg">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-semibold text-xl">Filters</h2>
-                <button @click="clearSideFilters"
+                <button @click="clearSideFilters" data-test="clear-filters"
                     class="border rounded-lg py-2 px-4 hover:border-alaska-gold">clear</button>
             </div>
 
             <div class="bg-white rounded-lg p-4">
                 <label class="block mb-2 text-sm font-medium">Filter by email</label>
-                <input v-model="recipesStore.filters.email" type="email" placeholder="email"
+                <input v-model="recipesStore.filters.email" type="email" placeholder="email" data-test="email-filter"
                     class="w-full p-2 rounded-lg border border-gray-300 focus:border-blue-900 focus:ring focus:ring-blue-200" />
 
                 <label class="block mt-4 mb-2 text-sm font-medium">Filter by ingredient</label>
-                <input v-model="recipesStore.filters.ingredient" placeholder="ingredient"
+                <input v-model="recipesStore.filters.ingredient" placeholder="ingredient" data-test="ingredient-filter"
                     class="w-full p-2 border rounded-lg border-gray-300 focus:border-blue-900 focus:ring focus:ring-blue-200" />
 
-                <button @click="applyFilters"
+                <button @click="applyFilters" data-test="apply-filters"
                     class="mt-6 w-full text-alaska-gold font-semibold border border-alaska-gold px-4 py-2 rounded hover:text-white hover:bg-alaska-gold transition">
                     Apply Filters
                 </button>
@@ -27,11 +27,13 @@
             <h1 class="text-2xl mb-4">Find Your Recipe</h1>
 
             <div class="relative">
-                <input v-model="recipesStore.filters.keyword" @input="debouncedFetch" type="text"
+                <input v-model="recipesStore.filters.keyword" 
+                    @input="debouncedFetch" type="text"
+                    autofocus
                     placeholder="Search recipes..."
                     class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-900 focus:ring focus:ring-blue-200" />
 
-                <button v-if="recipesStore.filters.keyword" @click="clearKeyword"
+                <button v-if="recipesStore.filters.keyword" @click="clearKeyword" data-test="clear-keyword"
                     class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-600 hover:text-gray-900"
                     title="Clear">
                     ✕
@@ -47,7 +49,8 @@
             </div>
 
             <template v-else>
-                <div v-if="recipesStore.recipes.length === 0" class="mt-12 text-center text-gray-600 dark:text-gray-300">
+                <div v-if="recipesStore.recipes.length === 0"
+                    class="mt-12 text-center text-gray-600 dark:text-gray-300">
                     <p class="text-lg font-semibold">No recipes found</p>
                     <p class="text-sm mt-1">Try adjusting your filters or search terms.</p>
                 </div>
@@ -121,7 +124,9 @@ onMounted(async () => {
     recipesStore.filters.keyword = keyword || ''
     recipesStore.filters.email = email || ''
     recipesStore.filters.ingredient = ingredient || ''
-    recipesStore.page = page ? parseInt(page) : 1
+
+    const parsedPage = parseInt(page, 10)
+    recipesStore.page = !isNaN(parsedPage) && parsedPage > 0 ? parsedPage : 1
 
     await search()
 })
