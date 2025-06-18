@@ -56,7 +56,7 @@ Or use any database GUI and connect to 127.0.0.1 port 3333
 
 There are two ways to generate demo data:
 
-* DemoSeeder which creates 200 full of delicious lorem ipsum.
+* DemoSeeder which creates 200 recipes full of delicious lorem ipsum.
 * Artisan command which generates recipes one at a time.
 
 
