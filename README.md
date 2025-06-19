@@ -83,7 +83,7 @@ Or connect with a GUI client:
 - **User**: `root`
 - **Password**: `password`
 
-Create test database `skeleton_app_test`:
+Create test database `skeleton_app_test` and give sail access:
 
 ```bash
 CREATE DATABASE IF NOT EXISTS skeleton_app_test;
