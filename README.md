@@ -83,6 +83,14 @@ Or connect with a GUI client:
 - **User**: `root`
 - **Password**: `password`
 
+Create test database `skeleton_app_test`:
+
+```bash
+CREATE DATABASE IF NOT EXISTS skeleton_app_test;
+GRANT ALL PRIVILEGES ON skeleton_app_test.* TO 'sail'@'%';
+FLUSH PRIVILEGES;
+```
+
 ---
 
 ## 🧪 Running Tests
