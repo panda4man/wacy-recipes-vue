@@ -1,15 +1,28 @@
-## Getting started
+# Wacy Recipes
 
-### Pre-requisites
-- docker
-- docker-compose
+A full-stack Laravel + Vue app for managing and browsing recipes. Built with Laravel Sail and Docker for a fast local development experience.
 
-### Check out this repository
-`git clone git@github.com:wildalaskan/skeleton-app-vue.git`
+---
 
-`cd skeleton-app-vue`
+## 🚀 Getting Started
 
-### Run composer to kickstart laravel sail
+### Prerequisites
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+---
+
+## 📦 Backend Setup (Laravel + Sail)
+
+### 1. Clone the Repository
+
+```bash
+git clone git@github.com:panda4man/wacy-recipes-vue.git
+cd wacy-recipes-vue
+```
+
+### 2. Install Dependencies
 
 ```bash
 docker run --rm \
@@ -20,66 +33,102 @@ docker run --rm \
     bash -c "composer install"
 ```
 
-### Run the application
-`cp .env.example .env`
-
-`./vendor/bin/sail up -d`
-
-`./vendor/bin/sail artisan key:generate`
-
-`./vendor/bin/sail artisan migrate`
-
-### Kickstart the nuxt frontend
-`./vendor/bin/sail npm install --prefix frontend`
-
-### Run the frontend
-`./vendor/bin/sail npm run dev --prefix frontend`
-
-### Confirm your application
-visit the frontend http://localhost:3000
-
-visit the backend http://localhost:8888
-
-
-### Connecting to your database from localhost
-`docker exec -it laravel-mysql-1 bash -c "mysql -uroot -ppassword"`
-
-Or use any database GUI and connect to 127.0.0.1 port 3333
-
-
-### Other tips
-`./vendor/bin/sail down` to bring down the stack
-
-## Tests
-
-**Frontend**
-
-`sail npm run test:unit --prefix frontend`
-
-**Backend**
-
-`sail php vendor/bin/pest`
-
-## Recipes
-
-### Seeds
-
-There are two ways to generate demo data:
-
-* DemoSeeder which creates 200 recipes full of delicious lorem ipsum.
-* Artisan command which generates recipes one at a time.
-
-
-**DemoSeeder**
+### 3. Configure Environment & Start Stack
 
 ```bash
-$ sail artisan db:seed --class=DemoSeeder
+cp .env.example .env
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate
 ```
 
-> We recommend running `sail artisan db:fresh` before this seeder for a fresh DB.
+---
 
-**Artisan Command**
+## 🎨 Frontend Setup (Vue)
+
+### 1. Install Frontend Dependencies
 
 ```bash
-$ sail artisan recipe:create
+./vendor/bin/sail npm install --prefix frontend
 ```
+
+### 2. Start Frontend Dev Server
+
+```bash
+./vendor/bin/sail npm run dev --prefix frontend
+```
+
+---
+
+## ✅ Confirm Your Application
+
+- Frontend: [http://localhost:3000](http://localhost:3000)  
+- Backend: [http://localhost:8888](http://localhost:8888)
+
+---
+
+## 🛢️ Database Access
+
+To access MySQL from your terminal:
+
+```bash
+docker exec -it laravel-mysql-1 bash -c "mysql -uroot -ppassword"
+```
+
+Or connect with a GUI client:
+
+- **Host**: `127.0.0.1`
+- **Port**: `3333`
+- **User**: `root`
+- **Password**: `password`
+
+---
+
+## 🧪 Running Tests
+
+### Backend (Laravel + Pest)
+
+```bash
+./vendor/bin/sail php vendor/bin/pest
+```
+
+### Frontend (Vue + Vitest)
+
+```bash
+./vendor/bin/sail npm run test:unit --prefix frontend
+```
+
+---
+
+## 🍳 Recipes: Demo Data
+
+You can generate sample recipes using either a seeder or an artisan command:
+
+### Option 1: Seeder
+
+Recommended for generating 200 recipes at once.
+
+```bash
+./vendor/bin/sail artisan migrate:fresh
+./vendor/bin/sail artisan db:seed --class=DemoSeeder
+```
+
+### Option 2: Artisan Command
+
+Creates one recipe interactively.
+
+```bash
+./vendor/bin/sail artisan recipe:create
+```
+
+---
+
+## 🛠️ Developer Tips
+
+- Bring down the Docker stack:
+
+  ```bash
+  ./vendor/bin/sail down
+  ```
+
+---
