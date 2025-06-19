@@ -14,6 +14,8 @@ class Step extends Model
         'description', 'order'
     ];
 
+    // ---- Relationships ----
+
     public function recipe(): BelongsTo
     {
         return $this->belongsTo(Recipe::class);

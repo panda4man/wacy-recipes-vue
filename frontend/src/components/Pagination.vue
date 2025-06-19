@@ -21,7 +21,7 @@
             <button v-for="page in props.paginationRange" :key="page" @click="changePage(page)" :class="[
                 'px-3 py-1 rounded border',
                 page === props.currentPage
-                    ? 'bg-yellow-500 text-black font-bold'
+                    ? 'bg-alaska-gold text-black font-bold'
                     : 'bg-white dark:bg-gray-700',
             ]">
                 {{ page }}

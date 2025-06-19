@@ -10,7 +10,7 @@ class RecipeFuzzyFieldFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        if (Str::contains($property, '.')) {
+        if (Str::contains($property, '.')) { //handle nested relations
             [$relation, $column] = explode('.', $property);
 
             $query->whereHas($relation, function ($q) use ($column, $value) {

@@ -2,16 +2,19 @@
     <div
         class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex items-center justify-center px-4 py-10">
         <div class="w-full max-w-3xl bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <button @click="router.back()" data-test="back-button"
+            <button @click="router.back()" 
+                data-test="back-button"
                 class="mb-4 text-blue-700 dark:text-yellow-300 hover:underline flex items-center gap-1">
                 <span>←</span> Back to Recipes
             </button>
 
             <div v-if="state.loading" data-test="loading-spinner">Loading...</div>
 
-            <div v-if="state.error" data-test="error-wrapper" class="text-center text-red-600 dark:text-red-400 mb-6">
+            <div v-if="state.error" 
+                data-test="error-wrapper" 
+                class="text-center text-red-600 dark:text-red-400 mb-6">
                 <p class="mb-2">⚠️ Failed to load recipe details. Please check your connection or try again.</p>
-                <button @click="fetchRecipe"
+                <button @click="fetchRecipe" 
                     data-test="retry-button"
                     class="px-4 py-2 bg-alaska-gold text-white rounded hover:bg-alaska-gold-light transition">
                     Try Again
@@ -23,8 +26,10 @@
                     v-if="recipe.name">
                     {{ recipe.name }}
                 </h1>
-                <a :href="`mailto:${recipe.author_email}`" data-test="recipe-author"
-                    class="text-gray-700 dark:text-gray-300 mb-4 italic" v-if="recipe.author_email">
+                <a :href="`mailto:${recipe.author_email}`" 
+                    data-test="recipe-author"
+                    class="text-gray-700 dark:text-gray-300 mb-4 italic" 
+                    v-if="recipe.author_email">
                     By: {{ recipe.author_email }}
                 </a>
 
@@ -88,12 +93,12 @@ const fetchRecipe = async () => {
         return
     }
 
-    if(!data || !data.data) {
+    if (!data || !data.data) {
         console.error('Invalid recipe data:', data)
         state.error = true
         return
     }
-    
+
     state.error = false
 
     recipe.value = data.data || {

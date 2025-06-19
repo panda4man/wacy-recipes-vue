@@ -8,12 +8,14 @@
             </div>
 
             <div class="bg-white rounded-lg p-4">
-                <label class="block mb-2 text-sm font-medium">Filter by email</label>
-                <input v-model="recipesStore.filters.email" type="email" placeholder="email" data-test="email-filter"
+                <label class="block mb-2 text-sm font-medium" for="email-filter">Filter by email</label>
+                <input v-model="recipesStore.filters.email" type="email" id="email-filter" placeholder="email"
+                    data-test="email-filter"
                     class="w-full p-2 rounded-lg border border-gray-300 focus:border-blue-900 focus:ring focus:ring-blue-200" />
 
-                <label class="block mt-4 mb-2 text-sm font-medium">Filter by ingredient</label>
-                <input v-model="recipesStore.filters.ingredient" placeholder="ingredient" data-test="ingredient-filter"
+                <label class="block mt-4 mb-2 text-sm font-medium" for="ingredient-filter">Filter by ingredient</label>
+                <input v-model="recipesStore.filters.ingredient" id="ingredient-filter" placeholder="ingredient"
+                    data-test="ingredient-filter"
                     class="w-full p-2 border rounded-lg border-gray-300 focus:border-blue-900 focus:ring focus:ring-blue-200" />
 
                 <button @click="applyFilters" data-test="apply-filters"
@@ -27,10 +29,10 @@
             <h1 class="text-2xl mb-4">Find Your Recipe</h1>
 
             <div class="relative">
-                <input v-model="recipesStore.filters.keyword" 
-                    @input="debouncedFetch" type="text"
-                    autofocus
-                    placeholder="Search recipes..."
+                <label for="recipe-search" class="sr-only">Search recipes</label>
+
+                <input v-model="recipesStore.filters.keyword" @input="debouncedFetch" id="recipe-search" type="text"
+                    autofocus placeholder="Search recipes..."
                     class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-900 focus:ring focus:ring-blue-200" />
 
                 <button v-if="recipesStore.filters.keyword" @click="clearKeyword" data-test="clear-keyword"
@@ -40,16 +42,24 @@
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                <RecipeCard v-for="recipe in recipesStore.recipes" :key="recipe.slug" :recipe="recipe" />
+            <div v-if="recipesStore.loading" data-test="loading-message"
+                class="py-6 text-center text-gray-700 dark:text-gray-300">
+                Loading recipes…
             </div>
+
+            <template v-else>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
+                    v-if="recipesStore.recipes?.length > 0">
+                    <RecipeCard v-for="recipe in recipesStore.recipes" :key="recipe.slug" :recipe="recipe" />
+                </div>
+            </template>
 
             <div class="mt-12 text-center text-red-600 dark:text-red-300" v-if="recipesStore.error">
                 <p class="text-lg font-semibold">We encountered an error processing your request. Please try again.</p>
             </div>
 
             <template v-else>
-                <div v-if="recipesStore.recipes.length === 0"
+                <div v-if="recipesStore.recipes?.length === 0"
                     class="mt-12 text-center text-gray-600 dark:text-gray-300">
                     <p class="text-lg font-semibold">No recipes found</p>
                     <p class="text-sm mt-1">Try adjusting your filters or search terms.</p>

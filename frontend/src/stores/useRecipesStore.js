@@ -22,7 +22,7 @@ export const useRecipesStore = defineStore("recipes", {
 
             const totalPages = state.meta.last_page
             const current = state.meta.current_page
-            const delta = 2
+            const delta = 2 // set the number of pages to show around the current page
             const range = []
 
             const start = Math.max(1, current - delta)
