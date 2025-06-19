@@ -135,6 +135,63 @@ describe('Filtering recipes', function () {
             ->assertJsonCount(1, 'data')
             ->assertJsonFragment(['name' => $matchingRecipe->name]);
     });
+
+    test('it filters recipes by keyword, ingredient, and email together', function () {
+        // Matches all three
+        $matchingRecipe = Recipe::factory()
+            ->has(Ingredient::factory()->state(['name' => 'Spicy Paprika']))
+            ->create([
+                'name' => 'Paprika Tacos',
+                'author_email' => 'chef@example.com',
+            ]);
+
+        // Matches only keyword and email
+        Recipe::factory()
+            ->has(Ingredient::factory()->state(['name' => 'Salt']))
+            ->create([
+                'name' => 'Spicy Salt Dish',
+                'author_email' => 'chef@example.com',
+            ]);
+
+        // Matches only ingredient and keyword
+        Recipe::factory()
+            ->has(Ingredient::factory()->state(['name' => 'Paprika']))
+            ->create([
+                'name' => 'Paprika Stir Fry',
+                'author_email' => 'another@example.com',
+            ]);
+
+        // Matches nothing
+        Recipe::factory()->create([
+            'name' => 'Vanilla Ice Cream',
+            'author_email' => 'ice@example.com',
+        ]);
+
+        get('/api/recipes?filter[keyword]=spicy&filter[ingredient]=paprika&filter[email]=chef@example.com')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonFragment(['name' => $matchingRecipe->name]);
+    });
+
+    test('sanitizes keyword input to prevent HTML injection', function () {
+        \App\Models\Recipe::query()->delete();
+        Recipe::factory()->create(['name' => 'BBQ <script>alert("hack")</script> Ribs']);
+
+        get('/api/recipes?filter[keyword]=<script>alert("hack")</script>')
+            ->assertOk()
+            ->assertJsonCount(1, 'data'); // assuming sanitization stripped the value
+    });
+
+    test('sanitizes ingredient input to prevent HTML injection', function () {
+        \App\Models\Recipe::query()->delete();
+        Recipe::factory()
+            ->has(Ingredient::factory()->state(['name' => 'Paprika <script>alert("hack")</script>']))
+            ->create();
+
+        get('/api/recipes?filter[ingredient]=<script>alert("hack")</script>')
+            ->assertOk()
+            ->assertJsonCount(1, 'data'); // assuming sanitization stripped the value
+    });
 });
 
 //

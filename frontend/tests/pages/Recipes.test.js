@@ -99,6 +99,24 @@ describe('Recipes.vue', () => {
         })
     })
 
+    describe('Loading State', () => {
+        it('shows the loading message when loading is true', async () => {
+            // Arrange: force loading state
+            store.loading = true
+
+            const wrapper = mountRecipes()
+            // No need to wait for fetch here because we're pre-setting loading
+
+            // Assert: loading message is visible
+            const loader = wrapper.find('[data-test="loading-message"]')
+            expect(loader.exists()).toBe(true)
+            expect(loader.text()).toContain('Loading recipes…')
+
+            // And recipes shouldn’t show up while loading
+            expect(wrapper.findAllComponents({ name: 'RecipeCard' })).toHaveLength(0)
+        })
+    })
+
     describe('Filter Behavior', () => {
         it('applies side filters', async () => {
             const wrapper = mountRecipes()
