@@ -72,7 +72,7 @@ cp .env.example .env
 To access MySQL from your terminal:
 
 ```bash
-docker exec -it laravel-mysql-1 bash -c "mysql -uroot -ppassword"
+docker exec -it wacy-recipes-vue-mysql-1 bash -c "mysql -uroot -ppassword"
 ```
 
 Or connect with a GUI client:
