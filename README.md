@@ -37,6 +37,7 @@ docker run --rm \
 
 ```bash
 cp .env.example .env
+cp frontend/.env.example frontend/.env
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan migrate
